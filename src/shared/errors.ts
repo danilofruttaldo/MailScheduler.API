@@ -31,13 +31,3 @@ export class EmailNotFoundError extends CustomError {
         super(EmailNotFoundError.Msg, EmailNotFoundError.HttpStatus);
     }
 }
-
-export class JobNotFoundError extends CustomError {
-
-    public static readonly Msg = 'Job with the given id does not exists in the database.';
-    public static readonly HttpStatus = HttpStatusCodes.NOT_FOUND;
-
-    constructor() {
-        super(JobNotFoundError.Msg, JobNotFoundError.HttpStatus);
-    }
-}
