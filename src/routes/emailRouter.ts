@@ -3,6 +3,7 @@ import { Request, Response, Router } from 'express';
 
 import emailService from '../services/emailService';
 import { ParamMissingError } from '../shared/errors';
+import { CronStatus } from '@models/emailModel';
 
 
 // Constants
@@ -38,8 +39,8 @@ router.post(p.create, async (req: Request, res: Response) => {
     if (!email)
         throw new ParamMissingError();
 
-    if (email.status == "")
-        email.status = "Added"
+    if (email.job.status == "")
+        email.job.status = CronStatus.Enabled;
 
     // Fetch data
     await emailService.create(email);
