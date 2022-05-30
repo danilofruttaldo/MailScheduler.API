@@ -4,7 +4,7 @@ import { SuperTest, Test, Response } from 'supertest';
 
 import app from '../../src/server';
 import emailRepo from '../../src/repositories/emailRepository';
-import Email, { IEmail } from '../../src/models/emailModel';
+import Email, { CronStatus, IEmail } from '../../src/models/emailModel';
 import { pErr } from '../../src/shared/functions';
 import { p as emailPaths } from '../../src/routes/emailRouter';
 import { ParamMissingError, EmailNotFoundError } from '../../src/shared/errors';
@@ -12,7 +12,7 @@ import { ParamMissingError, EmailNotFoundError } from '../../src/shared/errors';
 type TReqBody = string | object | undefined;
 
 
-describe('email-router', () => {
+describe('emailRouter', () => {
 
     const emailsPath = '/api/emails';
     const getEmailsPath = `${emailsPath}${emailPaths.read}`;
@@ -39,9 +39,9 @@ describe('email-router', () => {
             request was successful.`, (done) => {
             // Setup spy
             const emails = [
-                Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", "* * * * * *", "Added"),
-                Email.new(['to2@email.com'], ["cc2@email.com"], ["ccn2@email.com"], "Subject 2", "Body 2", "* * * * * *", "Added"),
-                Email.new(['to3@email.com'], ["cc3@email.com"], ["ccn3@email.com"], "Subject 3", "Body 3", "* * * * * *", "Added"),
+                Email.new([], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", { Cron: "* * * * * *", Status: "" }),
+                Email.new(['to2@email.com'], [], ["ccn2@email.com"], "Subject 2", "Body 2", { Cron: "* * * * * *", Status: "" }),
+                Email.new(['to3@email.com'], ["cc3@email.com"], [], "Subject 3", "Body 3", { Cron: "* * * * * *", Status: "" })
             ];
             spyOn(emailRepo, 'getAll').and.returnValue(Promise.resolve(emails));
             // Call API
@@ -88,7 +88,7 @@ describe('email-router', () => {
             return agent.post(addEmailsPath).type('form').send(reqBody);
         };
         const emailData = {
-            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", "* * * * * *", "Added"),
+            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", { Cron: "* * * * * *", Status: CronStatus.Enabled }),
         };
 
         it(`should return a status code of "${CREATED}" if the request was successful.`, (done) => {
@@ -143,7 +143,7 @@ describe('email-router', () => {
             return agent.put(updateEmailPath).type('form').send(reqBody);
         };
         const emailData = {
-            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", "* * * * * *", "Added"),
+            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", { Cron: "* * * * * *", Status: CronStatus.Processing }),
         };
 
         it(`should return a status code of "${OK}" if the request was successful.`, (done) => {

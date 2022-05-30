@@ -3,7 +3,7 @@ import { Request, Response, Router } from 'express';
 
 import emailService from '../services/emailService';
 import { ParamMissingError } from '../shared/errors';
-import { CronStatus } from '@models/emailModel';
+import { CronStatus } from '../models/emailModel';
 
 
 // Constants
