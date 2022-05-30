@@ -2,6 +2,7 @@ import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import path from 'path';
 import helmet from 'helmet';
+import cors from "cors";
 
 import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
@@ -9,7 +10,7 @@ import 'express-async-errors';
 
 import apiRouter from './routes/api';
 import logger from 'jet-logger';
-import { CustomError } from '@shared/errors';
+import { CustomError } from './shared/errors';
 
 
 // Constants
@@ -21,19 +22,18 @@ const app = express();
  **********************************************************************************/
 
 // Common middlewares
+app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Show routes called in console during development
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'development')
     app.use(morgan('dev'));
-}
 
 // Security (helmet recommended in express docs)
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production')
     app.use(helmet());
-}
 
 
 /***********************************************************************************
@@ -66,11 +66,9 @@ const staticDir = path.join(__dirname, 'public');
 app.use(express.static(staticDir));
 
 // Serve index.html file
-app.get('*', (_: Request, res: Response) => {
-    res.sendFile('index.html', {root: viewsDir});
+app.get('/', (_: Request, res: Response) => {
+    res.sendFile('index.html', { root: viewsDir });
 });
-
-
 
 // Export here and start in a diff file (for testing).
 export default app;

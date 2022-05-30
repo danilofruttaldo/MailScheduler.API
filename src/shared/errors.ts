@@ -22,13 +22,22 @@ export class ParamMissingError extends CustomError {
     }
 }
 
+export class EmailNotFoundError extends CustomError {
 
-export class UserNotFoundError extends CustomError {
-
-    public static readonly Msg = 'A user with the given id does not exists in the database.';
+    public static readonly Msg = 'Email with the given id does not exists in the database.';
     public static readonly HttpStatus = HttpStatusCodes.NOT_FOUND;
 
     constructor() {
-        super(UserNotFoundError.Msg, UserNotFoundError.HttpStatus);
+        super(EmailNotFoundError.Msg, EmailNotFoundError.HttpStatus);
+    }
+}
+
+export class JobNotFoundError extends CustomError {
+
+    public static readonly Msg = 'Job with the given id does not exists in the database.';
+    public static readonly HttpStatus = HttpStatusCodes.NOT_FOUND;
+
+    constructor() {
+        super(JobNotFoundError.Msg, JobNotFoundError.HttpStatus);
     }
 }

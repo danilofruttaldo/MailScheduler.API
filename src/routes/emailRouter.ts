@@ -1,9 +1,8 @@
 import StatusCodes from 'http-status-codes';
 import { Request, Response, Router } from 'express';
 
-import userService from '@services/user-service';
-import { ParamMissingError } from '@shared/errors';
-
+import emailService from '../services/emailService';
+import { ParamMissingError } from '../shared/errors';
 
 
 // Constants
@@ -12,64 +11,71 @@ const { CREATED, OK } = StatusCodes;
 
 // Paths
 export const p = {
-    get: '/all',
-    add: '/add',
-    update: '/update',
-    delete: '/delete/:id',
+    read: '/',
+    create: '/',
+    update: '/',
+    delete: '/:id',
 } as const;
 
 
 
 /**
- * Get all users.
+ * Get all emails.
  */
-router.get(p.get, async (_: Request, res: Response) => {
-    const users = await userService.getAll();
-    return res.status(OK).json({users});
+router.get(p.read, async (_: Request, res: Response) => {
+    const emails = await emailService.read();
+
+    return res.status(OK).json({ emails });
 });
 
 
 /**
- * Add one user.
+ * Add one email.
  */
-router.post(p.add, async (req: Request, res: Response) => {
-    const { user } = req.body;
+router.post(p.create, async (req: Request, res: Response) => {
+    const { email } = req.body;
     // Check param
-    if (!user) {
+    if (!email)
         throw new ParamMissingError();
-    }
+
+    if (email.status == "")
+        email.status = "Added"
+
     // Fetch data
-    await userService.addOne(user);
+    await emailService.create(email);
+
     return res.status(CREATED).end();
 });
 
 
 /**
- * Update one user.
+ * Update one email.
  */
 router.put(p.update, async (req: Request, res: Response) => {
-    const { user } = req.body;
+    const { email } = req.body;
     // Check param
-    if (!user) {
+    if (!email)
         throw new ParamMissingError();
-    }
+
     // Fetch data
-    await userService.updateOne(user);
+    await emailService.update(email);
+
     return res.status(OK).end();
 });
 
 
 /**
- * Delete one user.
+ * Delete one email.
  */
 router.delete(p.delete, async (req: Request, res: Response) => {
     const { id } = req.params;
     // Check param
-    if (!id) {
+    if (!id)
         throw new ParamMissingError();
-    }
+
     // Fetch data
-    await userService.delete(Number(id));
+    await emailService.delete(id);
+
     return res.status(OK).end();
 });
 

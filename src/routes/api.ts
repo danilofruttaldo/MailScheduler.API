@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import userRouter from './user-router';
+import emailRouter from './emailRouter';
 
 
 // Export the base-router
 const baseRouter = Router();
 
 // Setup routers
-baseRouter.use('/users', userRouter);
+baseRouter.use('/emails', emailRouter);
 
 // Export default.
 export default baseRouter;

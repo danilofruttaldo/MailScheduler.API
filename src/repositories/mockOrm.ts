@@ -1,7 +1,7 @@
 import jsonfile from 'jsonfile';
 
 
-const dbFilePath = 'src/repos/database.json';
+const dbFilePath = 'src/repositories/database.json';
 
 
 /**

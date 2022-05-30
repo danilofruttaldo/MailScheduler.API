@@ -2,134 +2,162 @@
  *                          Fetch and display users
  ******************************************************************************/
 
-displayUsers();
+displayEmails();
 
 
-function displayUsers() {
-    httpGet('/api/users/all')
+function displayEmails() {
+    httpGet('/api/emails')
         .then(response => response.json())
         .then((response) => {
-            var allUsers = response.users;
+            var allEmails = response.emails;
             // Empty the anchor
-            var allUsersAnchor = document.getElementById('all-users-anchor');
-            allUsersAnchor.innerHTML = '';
-            // Append users to anchor
-            allUsers.forEach((user) => {
-                allUsersAnchor.innerHTML += getUserDisplayEle(user);
+
+            var allEmailsAnchor = document.getElementById('all-emails-anchor');
+            allEmailsAnchor.innerHTML = '';
+
+            // Append emails to anchor
+            allEmails.forEach((email) => {
+                allEmailsAnchor.innerHTML += getEmailDisplayEle(email);
             });
         });
 };
 
 
-function getUserDisplayEle(user) {
-    return `<div class="user-display-ele">
-
+function getEmailDisplayEle(email) {
+    return `<div class="email-display-ele">
         <div class="normal-view">
-            <div>Name: ${user.name}</div>
-            <div>Email: ${user.email}</div>
-            <button class="edit-user-btn" data-user-id="${user.id}">
-                Edit
-            </button>
-            <button class="delete-user-btn" data-user-id="${user.id}">
-                Delete
-            </button>
+            <div>To: ${email.to}</div>
+            <div>Cc: ${email.cc}</div>
+            <div>Ccn: ${email.ccn}</div>
+            <div>Subject: ${email.subject}</div>
+            <div>Body: ${email.body}</div>
+            <div>Cron: ${email.job.cron ?? ""}</div>
+            <div>Status: ${email.job.status ?? ""}</div>
+            
+            <button class="edit-email-btn" data-email-id="${email.id}">Edit</button>
+            <button class="delete-email-btn" data-email-id="${email.id}">Delete</button>
         </div>
         
         <div class="edit-view">
-            <div>
-                Name: <input class="name-edit-input" value="${user.name}">
-            </div>
-            <div>
-                Email: <input class="email-edit-input" value="${user.email}">
-            </div>
-            <button class="submit-edit-btn" data-user-id="${user.id}">
-                Submit
-            </button>
-            <button class="cancel-edit-btn" data-user-id="${user.id}">
-                Cancel
-            </button>
+            <div>To: <input class="to-edit-input" value="${email.to}"></div>
+            <div>Cc: <input class="cc-edit-input" value="${email.cc}"></div>
+            <div>Ccn: <input class="ccn-edit-input" value="${email.ccn}"></div>
+            <div>Subject: <input class="subject-edit-input" value="${email.subject}"></div>
+            <div>Body: <input class="body-edit-input" value="${email.body}"></div>
+            <div>Cron: <input class="cron-edit-input" value="${email.job.cron ?? ""}"></div>
+            <div>Status: <input class="cron-edit-input" value="${email.job.status ?? ""}" disabled></div>
+            
+            <button class="submit-edit-btn" data-email-id="${email.id}">Submit</button>
+            <button class="cancel-edit-btn" data-email-id="${email.id}">Cancel</button>
         </div>
     </div>`;
 }
 
 
 /******************************************************************************
- *                        Add, Edit, and Delete Users
+ *                        Add, Edit, and Delete Emails
  ******************************************************************************/
 
 document.addEventListener('click', function (event) {
     event.preventDefault();
     var ele = event.target;
-    if (ele.matches('#add-user-btn')) {
-        addUser();
-    } else if (ele.matches('.edit-user-btn')) {
-        showEditView(ele.parentNode.parentNode);
-    } else if (ele.matches('.cancel-edit-btn')) {
-        cancelEdit(ele.parentNode.parentNode);
-    } else if (ele.matches('.submit-edit-btn')) {
-        submitEdit(ele);
-    } else if (ele.matches('.delete-user-btn')) {
-        deleteUser(ele);
-    }
+    if (ele.matches('#add-email-btn')) addEmail();
+    if (ele.matches('#clear-email-btn')) clearForm();
+    else if (ele.matches('.edit-email-btn')) showEditView(ele.parentNode.parentNode);
+    else if (ele.matches('.cancel-edit-btn')) cancelEdit(ele.parentNode.parentNode);
+    else if (ele.matches('.submit-edit-btn')) submitEdit(ele);
+    else if (ele.matches('.delete-email-btn')) deleteEmail(ele);
 }, false)
 
 
-function addUser() {
-    var nameInput = document.getElementById('name-input');
-    var emailInput = document.getElementById('email-input');
+function addEmail() {
+    var toInput = document.getElementById('to-input');
+    var ccInput = document.getElementById('cc-input');
+    var ccnInput = document.getElementById('ccn-input');
+    var subjectInput = document.getElementById('subject-input');
+    var bodyInput = document.getElementById('body-input');
+    var cronInput = document.getElementById('cron-input');
+
     var data = {
-        user: {
-            name: nameInput.value,
-            email: emailInput.value
+        email: {
+            to: toInput.value,
+            cc: ccInput.value,
+            ccn: ccnInput.value,
+            subject: subjectInput.value,
+            body: bodyInput.value,
+            job: {
+                cron: cronInput.value
+            }
         },
     };
-    httpPost('/api/users/add', data)
+    httpPost('/api/emails', data)
         .then(() => {
-            displayUsers();
-        })
+            displayEmails();
+        }).then(() => {
+            clearForm();
+        });
 }
 
+function clearForm() {
+    document.getElementById('to-input').value = "";
+    document.getElementById('cc-input').value = "";
+    document.getElementById('ccn-input').value = "";
+    document.getElementById('subject-input').value = "";
+    document.getElementById('body-input').value = "";
+    document.getElementById('cron-input').value = "";
+}
 
-function showEditView(userEle) {
-    var normalView = userEle.getElementsByClassName('normal-view')[0];
-    var editView = userEle.getElementsByClassName('edit-view')[0];
+function showEditView(emailEle) {
+    var normalView = emailEle.getElementsByClassName('normal-view')[0];
+    var editView = emailEle.getElementsByClassName('edit-view')[0];
     normalView.style.display = 'none';
     editView.style.display = 'block';
 }
 
 
-function cancelEdit(userEle) {
-    var normalView = userEle.getElementsByClassName('normal-view')[0];
-    var editView = userEle.getElementsByClassName('edit-view')[0];
+function cancelEdit(emailEle) {
+    var normalView = emailEle.getElementsByClassName('normal-view')[0];
+    var editView = emailEle.getElementsByClassName('edit-view')[0];
     normalView.style.display = 'block';
     editView.style.display = 'none';
 }
 
 
 function submitEdit(ele) {
-    var userEle = ele.parentNode.parentNode;
-    var nameInput = userEle.getElementsByClassName('name-edit-input')[0];
-    var emailInput = userEle.getElementsByClassName('email-edit-input')[0];
-    var id = ele.getAttribute('data-user-id');
+    var emailEle = ele.parentNode.parentNode;
+    var id = ele.getAttribute('data-email-id');
+    var toInput = emailEle.getElementsByClassName('to-edit-input')[0];
+    var ccInput = emailEle.getElementsByClassName('cc-edit-input')[0];
+    var ccnInput = emailEle.getElementsByClassName('ccn-edit-input')[0];
+    var subjectInput = emailEle.getElementsByClassName('subject-edit-input')[0];
+    var bodyInput = emailEle.getElementsByClassName('body-edit-input')[0];
+    var cronInput = emailEle.getElementsByClassName('cron-edit-input')[0];
+
     var data = {
-        user: {
-            name: nameInput.value,
-            email: emailInput.value,
-            id: Number(id),
+        email: {
+            id: id,
+            to: toInput.value,
+            cc: ccInput.value,
+            ccn: ccnInput.value,
+            subject: subjectInput.value,
+            body: bodyInput.value,
+            job: {
+                cron: cronInput.value
+            }
         },
     };
-	httpPut('/api/users/update', data)
+    httpPut('/api/emails', data)
         .then(() => {
-            displayUsers();
+            displayEmails();
         })
 }
 
 
-function deleteUser(ele) {
-    var id = ele.getAttribute('data-user-id');
-	httpDelete('/api/users/delete/' + id)
+function deleteEmail(ele) {
+    var id = ele.getAttribute('data-email-id');
+    httpDelete('/api/emails/' + id)
         .then(() => {
-            displayUsers();
+            displayEmails();
         })
 }
 
@@ -163,9 +191,11 @@ function getOptions(verb, data) {
             'Content-Type': 'application/json'
         }
     };
+
     if (data) {
         options.body = JSON.stringify(data);
     }
+
     return options;
 }
 
