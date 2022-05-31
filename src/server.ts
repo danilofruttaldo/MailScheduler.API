@@ -7,6 +7,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from 'express';
 import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
+import basicAuth from 'express-basic-auth';
 
 import apiRouter from './routes/api';
 import logger from 'jet-logger';
@@ -32,8 +33,13 @@ if (process.env.NODE_ENV === 'development')
     app.use(morgan('dev'));
 
 // Security (helmet recommended in express docs)
-if (process.env.NODE_ENV === 'production')
+if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
+    app.use(basicAuth({
+        users: { admin: process.env.BASIC_AUTH_PASS ?? "password123" },
+        challenge: true
+    }));
+}
 
 
 /***********************************************************************************
