@@ -1,0 +1,12 @@
+version: '3.4'
+
+services:
+  mailscheduler:
+    image: mailscheduler
+    env_file:
+      - ./pre-start/env/production.env
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - ${PORT}:${PORT}

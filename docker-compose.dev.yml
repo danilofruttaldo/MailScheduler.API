@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  mailscheduler:
+    image: mailscheduler
+    env_file:
+      - ./pre-start/env/development.env
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    ports:
+      - ${PORT}:${PORT}
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "-r module-alias/register ./dist --env=production"]
