@@ -1,11 +1,5 @@
 import { newGuid } from "../shared/functions";
-
-export enum CronStatus {
-    Enabled = "Enabled",
-    Disabled = "Disabled",
-    Processing = "Processing",
-    Error = "Error"
-}
+import { CronStatus } from "./cronStatus";
 
 // Email schema
 export interface IEmail {
