@@ -1,4 +1,5 @@
-import { CronStatus, IEmail } from '../models/emailModel';
+import { IEmail } from '../models/emailModel';
+import { CronStatus } from "../models/cronStatus";
 import { newGuid } from '../shared/functions';
 import orm from './mockOrm';
 

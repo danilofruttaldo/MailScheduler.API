@@ -4,7 +4,8 @@ import { SuperTest, Test, Response } from 'supertest';
 
 import app from '../../src/server';
 import emailRepo from '../../src/repositories/emailRepository';
-import Email, { CronStatus, IEmail } from '../../src/models/emailModel';
+import Email, { IEmail } from '../../src/models/emailModel';
+import { CronStatus } from '../../src/models/cronStatus';
 import { pErr } from '../../src/shared/functions';
 import { p as emailPaths } from '../../src/routes/emailRouter';
 import { ParamMissingError, EmailNotFoundError } from '../../src/shared/errors';
