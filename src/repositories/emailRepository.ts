@@ -7,13 +7,13 @@ import orm from './mockOrm';
 /**
  * Get one email.
  * 
- * @param email 
+ * @param id 
  * @returns 
  */
-async function getOne(email: string): Promise<IEmail | null> {
+async function getOne(id: string): Promise<IEmail | null> {
     const db = await orm.openDb();
     for (const email of db.emails) {
-        if (email.email === email)
+        if (email.id === id)
             return email;
     }
 
