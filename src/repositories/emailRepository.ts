@@ -59,6 +59,7 @@ async function getAll(): Promise<IEmail[]> {
 async function add(email: IEmail): Promise<void> {
     const db = await orm.openDb();
     email.id = newGuid();
+    email.job.id = newGuid();
     email.job.status = email.job.cron === "" ? CronStatus.Disabled : CronStatus.Enabled;
     db.emails.push(email);
 

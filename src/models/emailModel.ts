@@ -1,5 +1,5 @@
 import { newGuid } from "../shared/functions";
-import { CronStatus } from "./cronStatus";
+import { IJob } from "./jobModel";
 
 // Email schema
 export interface IEmail {
@@ -9,10 +9,7 @@ export interface IEmail {
     ccn: string[];
     subject: string;
     body: string;
-    job: {
-        cron: string;
-        status: CronStatus;
-    };
+    job: IJob;
 }
 
 

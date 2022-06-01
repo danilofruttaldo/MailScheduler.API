@@ -33,8 +33,7 @@ function addOne(email: IEmail): Promise<void> {
  */
 async function updateOne(email: IEmail): Promise<void> {
     const persists = await emailRepository.persists(email.id);
-    if (!persists)
-        throw new EmailNotFoundError();
+    if (!persists) throw new EmailNotFoundError();
 
     return emailRepository.update(email);
 }
@@ -48,8 +47,7 @@ async function updateOne(email: IEmail): Promise<void> {
  */
 async function deleteOne(id: string): Promise<void> {
     const persists = await emailRepository.persists(id);
-    if (!persists)
-        throw new EmailNotFoundError();
+    if (!persists) throw new EmailNotFoundError();
 
     return emailRepository.delete(id);
 }

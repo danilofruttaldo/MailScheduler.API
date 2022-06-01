@@ -4,6 +4,8 @@ import { Request, Response, Router } from 'express';
 import emailService from '../services/emailService';
 import { ParamMissingError } from '../shared/errors';
 import { CronStatus } from "../models/cronStatus";
+import scheduleService from '@services/scheduleService';
+import logger, { LoggerModes } from 'jet-logger';
 
 
 // Constants
@@ -36,14 +38,14 @@ router.get(p.read, async (_: Request, res: Response) => {
 router.post(p.create, async (req: Request, res: Response) => {
     const { email } = req.body;
     // Check param
-    if (!email)
-        throw new ParamMissingError();
+    if (!email) throw new ParamMissingError();
 
     if (email.job.status == "")
         email.job.status = CronStatus.Enabled;
 
     // Fetch data
     await emailService.create(email);
+    await scheduleService.create(email);
 
     return res.status(CREATED).end();
 });
@@ -55,11 +57,15 @@ router.post(p.create, async (req: Request, res: Response) => {
 router.put(p.update, async (req: Request, res: Response) => {
     const { email } = req.body;
     // Check param
-    if (!email)
-        throw new ParamMissingError();
+    if (!email) throw new ParamMissingError();
 
     // Fetch data
+    
     await emailService.update(email);
+    if (email.job.cron == "")
+        await scheduleService.delete(email.id);
+    else
+        await scheduleService.update(email);
 
     return res.status(OK).end();
 });
@@ -71,11 +77,11 @@ router.put(p.update, async (req: Request, res: Response) => {
 router.delete(p.delete, async (req: Request, res: Response) => {
     const { id } = req.params;
     // Check param
-    if (!id)
-        throw new ParamMissingError();
+    if (!id) throw new ParamMissingError();
 
     // Fetch data
     await emailService.delete(id);
+    await scheduleService.delete(id);
 
     return res.status(OK).end();
 });

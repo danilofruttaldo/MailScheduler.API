@@ -31,3 +31,13 @@ export class EmailNotFoundError extends CustomError {
         super(EmailNotFoundError.Msg, EmailNotFoundError.HttpStatus);
     }
 }
+
+export class ScheduleNotFoundError extends CustomError {
+
+    public static readonly Msg = 'Schedule with the given id does not exists in the database.';
+    public static readonly HttpStatus = HttpStatusCodes.NOT_FOUND;
+
+    constructor() {
+        super(ScheduleNotFoundError.Msg, ScheduleNotFoundError.HttpStatus);
+    }
+}

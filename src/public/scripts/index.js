@@ -47,7 +47,7 @@ function getEmailDisplayEle(email) {
             <div>Cron: <input class="cron-edit-input" value="${email.job.cron ?? ""}"></div>
             <div>Status: <input class="cron-edit-input" value="${email.job.status ?? ""}" disabled></div>
             
-            <button class="submit-edit-btn" data-email-id="${email.id}">Submit</button>
+            <button class="submit-edit-btn" data-email-id="${email.id}" data-email-job-id="${email.job.id}">Submit</button>
             <button class="cancel-edit-btn" data-email-id="${email.id}">Cancel</button>
         </div>
     </div>`;
@@ -80,9 +80,9 @@ function addEmail() {
 
     var data = {
         email: {
-            to: toInput.value,
-            cc: ccInput.value,
-            ccn: ccnInput.value,
+            to: toInput.value.split(','),
+            cc: ccInput.value.split(','),
+            ccn: ccnInput.value.split(','),
             subject: subjectInput.value,
             body: bodyInput.value,
             job: {
@@ -91,11 +91,8 @@ function addEmail() {
         },
     };
     httpPost('/api/emails', data)
-        .then(() => {
-            displayEmails();
-        }).then(() => {
-            clearForm();
-        });
+        .then(() => displayEmails())
+        .then(() => clearForm());
 }
 
 function clearForm() {
@@ -126,6 +123,7 @@ function cancelEdit(emailEle) {
 function submitEdit(ele) {
     var emailEle = ele.parentNode.parentNode;
     var id = ele.getAttribute('data-email-id');
+    var jobId = ele.getAttribute('data-email-job-id');
     var toInput = emailEle.getElementsByClassName('to-edit-input')[0];
     var ccInput = emailEle.getElementsByClassName('cc-edit-input')[0];
     var ccnInput = emailEle.getElementsByClassName('ccn-edit-input')[0];
@@ -136,29 +134,26 @@ function submitEdit(ele) {
     var data = {
         email: {
             id: id,
-            to: toInput.value,
-            cc: ccInput.value,
-            ccn: ccnInput.value,
+            to: toInput.value.split(','),
+            cc: ccInput.value.split(','),
+            ccn: ccnInput.value.split(','),
             subject: subjectInput.value,
             body: bodyInput.value,
             job: {
-                cron: cronInput.value
+                cron: cronInput.value,
+                id: jobId.value
             }
         },
     };
     httpPut('/api/emails', data)
-        .then(() => {
-            displayEmails();
-        })
+        .then(() => displayEmails())
 }
 
 
 function deleteEmail(ele) {
     var id = ele.getAttribute('data-email-id');
     httpDelete('/api/emails/' + id)
-        .then(() => {
-            displayEmails();
-        })
+        .then(() => displayEmails())
 }
 
 
@@ -192,9 +187,7 @@ function getOptions(verb, data) {
         }
     };
 
-    if (data) {
-        options.body = JSON.stringify(data);
-    }
+    if (data) options.body = JSON.stringify(data);
 
     return options;
 }

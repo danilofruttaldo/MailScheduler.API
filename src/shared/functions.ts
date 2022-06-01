@@ -1,6 +1,9 @@
 import { IEmail } from '../models/emailModel';
 import logger from 'jet-logger';
 import nodemailer from 'nodemailer';
+import { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
+import emailRepository from '../repositories/emailRepository';
+import scheduleService from '../services/scheduleService';
 
 /**
  * Print an error object if it's truthy. Useful for testing.
@@ -41,7 +44,8 @@ export function newGuid() {
  * 
  * @param email 
  */
-export function sendMail(email: IEmail) {
+export async function sendMail(email: IEmail) {
+    logger.info("Mail sending...");
     let transport = nodemailer.createTransport({
         host: process.env.NODE_MAILER_HOST,
         port: Number(process.env.NODE_MAILER_PORT),
@@ -57,13 +61,15 @@ export function sendMail(email: IEmail) {
         cc: email.cc,
         ccn: email.ccn,
         subject: email.subject,
-        text: email.body
+        body: email.body
     };
 
-    transport.sendMail(mailOptions, function (error: any, info: any) {
-        if (error)
-            logger.err(error, true);
-        else
-            logger.info(info);
-    });
+    logger.info(`Mail to: ${email.to}`);
+    logger.info(`Mail cc: ${email.cc}`);
+    logger.info(`Mail ccn: ${email.ccn}`);
+    logger.info(`Mail subject: ${email.subject}`);
+    logger.info(`Mail body: ${email.body}`);
+
+    transport.sendMail(mailOptions);
+    logger.info("Mail sent");
 }
