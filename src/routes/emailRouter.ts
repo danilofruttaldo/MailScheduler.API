@@ -5,7 +5,6 @@ import emailService from '../services/emailService';
 import { ParamMissingError } from '../shared/errors';
 import { CronStatus } from "../models/cronStatus";
 import scheduleService from '@services/scheduleService';
-import logger, { LoggerModes } from 'jet-logger';
 
 
 // Constants

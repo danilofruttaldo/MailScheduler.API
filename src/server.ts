@@ -9,6 +9,9 @@ import StatusCodes from 'http-status-codes';
 import 'express-async-errors';
 import basicAuth from 'express-basic-auth';
 
+import swaggerUI from 'swagger-ui-express';
+import swaggerDocument from './views/swagger.json';
+
 import apiRouter from './routes/api';
 import logger from 'jet-logger';
 import { CustomError } from './shared/errors';
@@ -16,6 +19,7 @@ import { CustomError } from './shared/errors';
 
 // Constants
 const app = express();
+// const swaggerDocument = require('./view/swagger.json');
 
 
 /***********************************************************************************
@@ -48,6 +52,9 @@ if (process.env.NODE_ENV === 'production') {
 
 // Add api router
 app.use('/api', apiRouter);
+
+// Add swagger router
+app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument));
 
 // Error handling
 app.use((err: Error | CustomError, _: Request, res: Response, __: NextFunction) => {
