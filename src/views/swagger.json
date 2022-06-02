@@ -34,9 +34,7 @@
                         "description": "Success"
                     }
                 }
-            }
-        },
-        "/api/Emails/{id}": {
+            },
             "put": {
                 "tags": [
                     "Emails"
@@ -55,7 +53,9 @@
                         "description": "Success"
                     }
                 }
-            },
+            }
+        },
+        "/api/Emails/{id}": {
             "delete": {
                 "tags": [
                     "Emails"
@@ -85,7 +85,7 @@
                 "type": "object",
                 "properties": {
                     "id": {
-                        "type": "integer"
+                        "type": "string"
                     },
                     "to": {
                         "type": "string"
@@ -103,7 +103,15 @@
                         "type": "string"
                     },
                     "job": {
-                        "type": "object"
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "cron": {
+                                "type": "string"
+                            }
+                        }
                     }
                 }
             },

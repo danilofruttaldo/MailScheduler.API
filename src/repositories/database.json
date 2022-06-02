@@ -1,1 +1,65 @@
-{"emails":[{"id":"e9fa27de-22d8-4201-b293-9d86e0d37985","to":["utente1@email.com","utente2@email.com"],"cc":[""],"ccn":["admin1@email.com"],"subject":"Prova 1","body":"Questa è una mail pianificata","job":{"cron":"15 * * * * *","id":"4f8f8e4c-cd8b-44cd-ae7e-d279b94b2590","status":"Enabled"}},{"id":"69166e72-3372-4b53-b7b2-903cde9d8c8d","to":["admin1@email.com"],"cc":["admin2@email.com","admin3@email.com"],"ccn":[""],"subject":"Prova 2","body":"Questa è un'altra mail pianificata","job":{"cron":"30 * * * * *","id":"aa4d9b0c-4122-4e59-80e5-aa371f413d7e","status":"Enabled"}},{"id":"8f749c26-7e3c-4295-9fdc-6ae06f4310fd","to":[""],"cc":["admin1@email.com","admin2@email.com","admin3@email.com"],"ccn":["admin0@email.com"],"subject":"Prova 3","body":"Questa è la terza mail pianificata","job":{"cron":"","id":"3f935406-f052-4071-a470-f2a747d0cc25","status":"Disabled"}}]}
+{
+    "emails": [
+        {
+            "id": "e9fa27de-22d8-4201-b293-9d86e0d37985",
+            "to": [
+                "utente1@email.com",
+                "utente2@email.com"
+            ],
+            "cc": [
+                ""
+            ],
+            "ccn": [
+                "admin1@email.com"
+            ],
+            "subject": "Prova 1",
+            "body": "Questa è una mail pianificata",
+            "job": {
+                "cron": "",
+                "id": "608c271d-4974-426f-b911-3449a5360819",
+                "status": "Disabled"
+            }
+        },
+        {
+            "id": "69166e72-3372-4b53-b7b2-903cde9d8c8d",
+            "to": [
+                "admin1@email.com"
+            ],
+            "cc": [
+                "admin2@email.com",
+                "admin3@email.com"
+            ],
+            "ccn": [
+                ""
+            ],
+            "subject": "Prova 2",
+            "body": "Questa è un'altra mail pianificata",
+            "job": {
+                "cron": "",
+                "id": "ae2a19b9-5bc0-4213-a80d-a8d113642922",
+                "status": "Disabled"
+            }
+        },
+        {
+            "id": "8f749c26-7e3c-4295-9fdc-6ae06f4310fd",
+            "to": [
+                ""
+            ],
+            "cc": [
+                "admin1@email.com",
+                "admin2@email.com",
+                "admin3@email.com"
+            ],
+            "ccn": [
+                "admin0@email.com"
+            ],
+            "subject": "Prova 3",
+            "body": "Questa è la terza mail pianificata",
+            "job": {
+                "cron": "",
+                "id": "cd1b71e7-084f-4e0f-abc4-77df07b91bd2",
+                "status": "Disabled"
+            }
+        }
+    ]
+}

@@ -32,15 +32,14 @@ router.get(p.read, async (_: Request, res: Response) => {
 
 
 /**
- * Add one email.
+ * Add an email.
  */
 router.post(p.create, async (req: Request, res: Response) => {
     const { email } = req.body;
     // Check param
     if (!email) throw new ParamMissingError();
 
-    if (email.job.status == "")
-        email.job.status = CronStatus.Enabled;
+    email.job.status = email.job.cron === "" ? CronStatus.Disabled : CronStatus.Enabled;
 
     // Fetch data
     await emailService.create(email);
@@ -51,7 +50,7 @@ router.post(p.create, async (req: Request, res: Response) => {
 
 
 /**
- * Update one email.
+ * Update an email.
  */
 router.put(p.update, async (req: Request, res: Response) => {
     const { email } = req.body;
@@ -59,7 +58,7 @@ router.put(p.update, async (req: Request, res: Response) => {
     if (!email) throw new ParamMissingError();
 
     // Fetch data
-    
+
     await emailService.update(email);
     if (email.job.cron == "")
         await scheduleService.delete(email.id);
@@ -71,7 +70,7 @@ router.put(p.update, async (req: Request, res: Response) => {
 
 
 /**
- * Delete one email.
+ * Delete an email.
  */
 router.delete(p.delete, async (req: Request, res: Response) => {
     const { id } = req.params;

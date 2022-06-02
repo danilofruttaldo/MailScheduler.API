@@ -6,7 +6,7 @@ import orm from './mockOrm';
 
 
 /**
- * Get one email.
+ * Get an email.
  * 
  * @param id 
  * @returns 
@@ -23,7 +23,7 @@ async function getOne(id: string): Promise<IEmail | null> {
 
 
 /**
- * See if a email with the given id exists.
+ * See if an email with the given id exists.
  * 
  * @param id 
  */
@@ -51,7 +51,7 @@ async function getAll(): Promise<IEmail[]> {
 
 
 /**
- * Add one email.
+ * Add an email.
  * 
  * @param email 
  * @returns 
@@ -60,7 +60,7 @@ async function add(email: IEmail): Promise<void> {
     const db = await orm.openDb();
     email.id = newGuid();
     email.job.id = newGuid();
-    email.job.status = email.job.cron === "" ? CronStatus.Disabled : CronStatus.Enabled;
+
     db.emails.push(email);
 
     return orm.saveDb(db);
@@ -68,7 +68,7 @@ async function add(email: IEmail): Promise<void> {
 
 
 /**
- * Update a email.
+ * Update an email.
  * 
  * @param email 
  * @returns 
@@ -87,7 +87,7 @@ async function update(email: IEmail): Promise<void> {
 
 
 /**
- * Delete one email.
+ * Delete an email.
  * 
  * @param id 
  * @returns 
@@ -107,7 +107,7 @@ async function deleteOne(id: string): Promise<void> {
 // Export default
 export default {
     getOne,
-    persists,
+    exists: persists,
     getAll,
     add,
     update,

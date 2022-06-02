@@ -8,7 +8,7 @@ import logger from 'jet-logger';
 
 
 /**
- * Schedule one schedule.
+ * Create a schedule.
  * 
  * @param email 
  * @returns 
@@ -21,13 +21,13 @@ async function addOne(email: IEmail): Promise<void> {
 
 
 /**
- * Update one schedule.
+ * Update a schedule.
  * 
  * @param email 
  * @returns 
  */
 async function updateOne(email: IEmail): Promise<void> {
-    const persists = await emailRepository.persists(email.id);
+    const persists = await emailRepository.exists(email.id);
     if (!persists) throw new ScheduleNotFoundError();
 
     logger.info(`Job rescheduling "${email.job.cron}" (id: ${email.job.id})`);

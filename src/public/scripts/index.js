@@ -34,8 +34,8 @@ function getEmailDisplayEle(email) {
             <div>Cron: ${email.job.cron ?? ""}</div>
             <div>Status: ${email.job.status ?? ""}</div>
             
-            <button class="edit-email-btn" data-email-id="${email.id}">Edit</button>
-            <button class="delete-email-btn" data-email-id="${email.id}">Delete</button>
+            <button class="edit-email-btn" data-email-id="${email.id}" data-email-job-id="${email.job.id}">Edit</button>
+            <button class="delete-email-btn" data-email-id="${email.id}" data-email-job-id="${email.job.id}">Delete</button>
         </div>
         
         <div class="edit-view">
@@ -48,7 +48,7 @@ function getEmailDisplayEle(email) {
             <div>Status: <input class="cron-edit-input" value="${email.job.status ?? ""}" disabled></div>
             
             <button class="submit-edit-btn" data-email-id="${email.id}" data-email-job-id="${email.job.id}">Submit</button>
-            <button class="cancel-edit-btn" data-email-id="${email.id}">Cancel</button>
+            <button class="cancel-edit-btn" data-email-id="${email.id}" data-email-job-id="${email.job.id}">Cancel</button>
         </div>
     </div>`;
 }
@@ -141,7 +141,7 @@ function submitEdit(ele) {
             body: bodyInput.value,
             job: {
                 cron: cronInput.value,
-                id: jobId.value
+                id: jobId
             }
         },
     };

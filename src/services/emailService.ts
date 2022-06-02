@@ -15,7 +15,7 @@ function getAll(): Promise<IEmail[]> {
 
 
 /**
- * Add one email.
+ * Create an email.
  * 
  * @param email 
  * @returns 
@@ -26,28 +26,28 @@ function addOne(email: IEmail): Promise<void> {
 
 
 /**
- * Update one email.
+ * Update an email.
  * 
  * @param email 
  * @returns 
  */
 async function updateOne(email: IEmail): Promise<void> {
-    const persists = await emailRepository.persists(email.id);
-    if (!persists) throw new EmailNotFoundError();
+    const exists = await emailRepository.exists(email.id);
+    if (!exists) throw new EmailNotFoundError();
 
     return emailRepository.update(email);
 }
 
 
 /**
- * Delete a email by their id.
+ * Delete an email by id.
  * 
  * @param id 
  * @returns 
  */
 async function deleteOne(id: string): Promise<void> {
-    const persists = await emailRepository.persists(id);
-    if (!persists) throw new EmailNotFoundError();
+    const exists = await emailRepository.exists(id);
+    if (!exists) throw new EmailNotFoundError();
 
     return emailRepository.delete(id);
 }
