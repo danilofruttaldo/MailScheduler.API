@@ -11,14 +11,15 @@ import orm from './mockOrm';
  * @param id 
  * @returns 
  */
-async function getOne(id: string): Promise<IEmail | null> {
+async function getOne(id: string): Promise<IEmail> {
+    let result;
     const db = await orm.openDb();
     for (const email of db.emails) {
         if (email.id === id)
-            return email;
+            result = email;
     }
 
-    return null;
+    return result;
 }
 
 

@@ -30,7 +30,7 @@
                     }
                 },
                 "responses": {
-                    "200": {
+                    "201": {
                         "description": "Success"
                     }
                 }
@@ -56,6 +56,27 @@
             }
         },
         "/api/Emails/{id}": {
+            "get": {
+                "tags": [
+                    "Emails"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    }
+                }
+            },
             "delete": {
                 "tags": [
                     "Emails"

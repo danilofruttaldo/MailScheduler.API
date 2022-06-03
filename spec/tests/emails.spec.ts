@@ -16,7 +16,7 @@ type TReqBody = string | object | undefined;
 describe('emailRouter', () => {
 
     const emailsPath = '/api/emails';
-    const getEmailsPath = `${emailsPath}${emailPaths.read}`;
+    const getEmailsPath = `${emailsPath}${emailPaths.readAll}`;
     const addEmailsPath = `${emailsPath}${emailPaths.create}`;
     const updateEmailPath = `${emailsPath}${emailPaths.update}`;
     const deleteEmailPath = `${emailsPath}${emailPaths.delete}`;

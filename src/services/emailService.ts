@@ -1,7 +1,7 @@
 import emailRepository from '../repositories/emailRepository';
 import { IEmail } from '../models/emailModel';
 import { EmailNotFoundError } from '../shared/errors';
-
+import logger from 'jet-logger';
 
 
 /**
@@ -13,6 +13,18 @@ function getAll(): Promise<IEmail[]> {
     return emailRepository.getAll();
 }
 
+/**
+ * Get an email.
+ * 
+ * @param id 
+ * @returns 
+ */
+ async function getOne(id: string): Promise<IEmail> {
+    const exists = await emailRepository.exists(id);
+    if (!exists) throw new EmailNotFoundError();
+
+    return emailRepository.getOne(id);
+}
 
 /**
  * Create an email.
@@ -55,7 +67,8 @@ async function deleteOne(id: string): Promise<void> {
 
 // Export default
 export default {
-    read: getAll,
+    readAll: getAll,
+    read: getOne,
     create: addOne,
     update: updateOne,
     delete: deleteOne,

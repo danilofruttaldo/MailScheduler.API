@@ -13,7 +13,8 @@ const { CREATED, OK } = StatusCodes;
 
 // Paths
 export const p = {
-    read: '/',
+    readAll: '/',
+    readOne: '/:id',
     create: '/',
     update: '/',
     delete: '/:id',
@@ -24,8 +25,21 @@ export const p = {
 /**
  * Get all emails.
  */
-router.get(p.read, async (_: Request, res: Response) => {
-    const emails = await emailService.read();
+router.get(p.readAll, async (_: Request, res: Response) => {
+    const emails = await emailService.readAll();
+
+    return res.status(OK).json({ emails });
+});
+
+/**
+ * Get an email.
+ */
+ router.get(p.readOne, async (req: Request, res: Response) => {
+    const { id } = req.params;
+    // Check param
+    if (!id) throw new ParamMissingError();
+
+    const emails = await emailService.read(id);
 
     return res.status(OK).json({ emails });
 });
@@ -54,6 +68,7 @@ router.post(p.create, async (req: Request, res: Response) => {
  */
 router.put(p.update, async (req: Request, res: Response) => {
     const { email } = req.body;
+    
     // Check param
     if (!email) throw new ParamMissingError();
 
