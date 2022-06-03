@@ -19,7 +19,6 @@ import { CustomError } from './shared/errors';
 
 // Constants
 const app = express();
-// const swaggerDocument = require('./view/swagger.json');
 
 
 /***********************************************************************************

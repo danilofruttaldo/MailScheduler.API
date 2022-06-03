@@ -5,7 +5,7 @@ import { SuperTest, Test, Response } from 'supertest';
 import app from '../../src/server';
 import emailRepo from '../../src/repositories/emailRepository';
 import Email, { IEmail } from '../../src/models/emailModel';
-import { CronStatus } from '../../src/models/cronStatus';
+import Job, { IJob } from '../../src/models/jobModel';
 import { pErr } from '../../src/shared/functions';
 import { p as emailPaths } from '../../src/routes/emailRouter';
 import { ParamMissingError, EmailNotFoundError } from '../../src/shared/errors';
@@ -40,9 +40,9 @@ describe('emailRouter', () => {
             request was successful.`, (done) => {
             // Setup spy
             const emails = [
-                Email.new([], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", { Cron: "* * * * * *", Status: "" }),
-                Email.new(['to2@email.com'], [], ["ccn2@email.com"], "Subject 2", "Body 2", { Cron: "* * * * * *", Status: "" }),
-                Email.new(['to3@email.com'], ["cc3@email.com"], [], "Subject 3", "Body 3", { Cron: "* * * * * *", Status: "" })
+                Email.new([], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", Job.new("")),
+                Email.new(['to2@email.com'], [], ["ccn2@email.com"], "Subject 2", "Body 2", Job.new("")),
+                Email.new(['to3@email.com'], ["cc3@email.com"], [], "Subject 3", "Body 3", Job.new("")),
             ];
             spyOn(emailRepo, 'getAll').and.returnValue(Promise.resolve(emails));
             // Call API
@@ -89,7 +89,7 @@ describe('emailRouter', () => {
             return agent.post(addEmailsPath).type('form').send(reqBody);
         };
         const emailData = {
-            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", { Cron: "* * * * * *", Status: CronStatus.Enabled }),
+            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", Job.new("")),
         };
 
         it(`should return a status code of "${CREATED}" if the request was successful.`, (done) => {
@@ -144,12 +144,12 @@ describe('emailRouter', () => {
             return agent.put(updateEmailPath).type('form').send(reqBody);
         };
         const emailData = {
-            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", { Cron: "* * * * * *", Status: CronStatus.Processing }),
+            email: Email.new(['to1@email.com'], ["cc1@email.com"], ["ccn1@email.com"], "Subject 1", "Body 1", Job.new("")),
         };
 
         it(`should return a status code of "${OK}" if the request was successful.`, (done) => {
             // Setup spy
-            spyOn(emailRepo, 'persists').and.returnValue(Promise.resolve(true));
+            spyOn(emailRepo, 'exists').and.returnValue(Promise.resolve(true));
             spyOn(emailRepo, 'update').and.returnValue(Promise.resolve());
             // Call Api
             callApi(emailData)
@@ -187,7 +187,7 @@ describe('emailRouter', () => {
 
         it(`should return a JSON object with an error message and a status code of "${BAD_REQUEST}"
             if the request was unsuccessful.`, (done) => {
-            spyOn(emailRepo, 'persists').and.returnValue(Promise.resolve(true));
+            spyOn(emailRepo, 'exists').and.returnValue(Promise.resolve(true));
             // Setup spy
             const updateErrMsg = 'Could not update email.';
             spyOn(emailRepo, 'update').and.throwError(updateErrMsg);
@@ -215,7 +215,7 @@ describe('emailRouter', () => {
 
         it(`should return a status code of "${OK}" if the request was successful.`, (done) => {
             // Setup spy
-            spyOn(emailRepo, 'persists').and.returnValue(Promise.resolve(true));
+            spyOn(emailRepo, 'exists').and.returnValue(Promise.resolve(true));
             spyOn(emailRepo, 'delete').and.returnValue(Promise.resolve());
             // Call api
             callApi(5)
@@ -241,7 +241,7 @@ describe('emailRouter', () => {
 
         it(`should return a JSON object with an error message and a status code of "${BAD_REQUEST}"
             if the request was unsuccessful.`, (done) => {
-            spyOn(emailRepo, 'persists').and.returnValue(Promise.resolve(true));
+            spyOn(emailRepo, 'exists').and.returnValue(Promise.resolve(true));
             // Setup spy
             const deleteErrMsg = 'Could not delete email.';
             spyOn(emailRepo, 'delete').and.throwError(deleteErrMsg);

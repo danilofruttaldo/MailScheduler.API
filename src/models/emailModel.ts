@@ -1,5 +1,5 @@
 import { newGuid } from "../shared/functions";
-import { IJob } from "./jobModel";
+import Job, { IJob } from "./jobModel";
 
 // Email schema
 export interface IEmail {
@@ -33,7 +33,7 @@ function getNew(
         ccn,
         subject,
         body,
-        job
+        job: job
     };
 }
 

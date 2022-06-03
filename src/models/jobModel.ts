@@ -13,11 +13,11 @@ export interface IJob {
  * 
  * @returns 
  */
-function getNew(cron: string, status: CronStatus): IJob {
+function getNew(cron: string): IJob {
     return {
         id: newGuid(),
         cron,
-        status
+        status: cron == "" ? CronStatus.Disabled : CronStatus.Enabled
     };
 }
 

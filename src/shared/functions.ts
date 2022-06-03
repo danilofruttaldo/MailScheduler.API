@@ -1,9 +1,7 @@
 import { IEmail } from '../models/emailModel';
 import logger from 'jet-logger';
 import nodemailer from 'nodemailer';
-import { SentMessageInfo } from 'nodemailer/lib/smtp-transport';
-import emailRepository from '../repositories/emailRepository';
-import scheduleService from '../services/scheduleService';
+
 
 /**
  * Print an error object if it's truthy. Useful for testing.
@@ -13,16 +11,6 @@ import scheduleService from '../services/scheduleService';
 export function pErr(err?: Error): void {
     if (!!err)
         logger.err(err);
-};
-
-
-/**
- * Get a random number between 1 and 1,000,000,000,000
- * 
- * @returns 
- */
-export function getRandomInt(): number {
-    return Math.floor(Math.random() * 1_000_000_000_000);
 };
 
 

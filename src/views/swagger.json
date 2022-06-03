@@ -84,32 +84,37 @@
             "EmailModel": {
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string"
-                    },
-                    "to": {
-                        "type": "string"
-                    },
-                    "cc": {
-                        "type": "string"
-                    },
-                    "ccn": {
-                        "type": "string"
-                    },
-                    "subject": {
-                        "type": "string"
-                    },
-                    "body": {
-                        "type": "string"
-                    },
-                    "job": {
+                    "email": {
                         "type": "object",
                         "properties": {
                             "id": {
                                 "type": "string"
                             },
-                            "cron": {
+                            "to": {
                                 "type": "string"
+                            },
+                            "cc": {
+                                "type": "string"
+                            },
+                            "ccn": {
+                                "type": "string"
+                            },
+                            "subject": {
+                                "type": "string"
+                            },
+                            "body": {
+                                "type": "string"
+                            },
+                            "job": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "cron": {
+                                        "type": "string"
+                                    }
+                                }
                             }
                         }
                     }

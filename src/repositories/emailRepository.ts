@@ -107,9 +107,9 @@ async function deleteOne(id: string): Promise<void> {
 // Export default
 export default {
     getOne,
-    exists: persists,
     getAll,
     add,
     update,
     delete: deleteOne,
+    exists: persists
 } as const;

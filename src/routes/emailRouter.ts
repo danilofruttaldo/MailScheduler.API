@@ -78,8 +78,8 @@ router.delete(p.delete, async (req: Request, res: Response) => {
     if (!id) throw new ParamMissingError();
 
     // Fetch data
-    await emailService.delete(id);
     await scheduleService.delete(id);
+    await emailService.delete(id);
 
     return res.status(OK).end();
 });

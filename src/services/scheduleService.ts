@@ -44,7 +44,7 @@ async function updateOne(email: IEmail): Promise<void> {
  */
 async function deleteOne(id: string): Promise<void> {
     const email = await emailRepository.getOne(id);
-    if (!email) throw new ScheduleNotFoundError();
+    if (!email) return;
 
     logger.info(`Job cancelling (id: ${email.job.id})`);
     scheduler.cancelJob(email.job.id);
